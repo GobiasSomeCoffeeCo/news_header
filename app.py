@@ -1,25 +1,29 @@
 
 import webbrowser
+from re import search
 
 from requester import NewsHead
 
 FETCHING = "Fetching HEADlines, please be patient..."
 
+
 def event_loop():
     news_head = NewsHead()
 
-    print("\n==========")
+    print("\n==========================================")
     print("What headlines would you like me to fetch???")
-    print("==========\n")
+    print("==========================================")
 
     cmd = "EMPTY"
     while cmd != "x" and cmd:
         cmd = input(
-            "Please select from the following: \n\r[N]YTimes headlines?\n\
-                     \n\r[W]ashington Post headlines?\n\
-                     \n\rThe [A]tlantic headlines?\n\
-                     \n\r[P]olitico headlines?\n\
-                     \n\rE[x]it\n"
+            "\nPlease select from the following: \n\n\r[N]YTimes headlines?\n\
+                     \r[W]ashington Post headlines?\n\
+                     \rThe [A]tlantic headlines?\n\
+                     \r[P]olitico headlines?\n\
+                     \r[S]earch for phrase\n\
+                     \rE[x]it\n\
+                     \n\rSelect: "
         )
         cmd = cmd.lower().strip()
 
@@ -42,24 +46,72 @@ def event_loop():
             print(FETCHING)
             headlines, links = news_head.get_politico_headlines()
             news_handler(headlines, links)
-            
-    print('\n===========================================')
+
+        if cmd == "s":
+            headlines, links = website_getter()
+            web_searcher(headlines)
+
+        if cmd != "x" and cmd:
+            print(f"\nSorry, I do not understand {cmd} command...")
+
+    print("\n===========================================")
     print("All done, thanks for using News Header!!!!!!")
-    print('===========================================')
+    print("===========================================")
+
 
 def news_handler(headlines, links):
     for i, j in enumerate(headlines, 1):
         print(f"{i}: {j}")
-    articles_finder = input("Do any of these interest you Y/N?: ")
+    articles_finder = input("\nDo any of these interest you Y/N?: ")
     articles_finder = articles_finder.lower().strip()
+
     if articles_finder == "y":
-        article_number = int(input("Please select number: "))
-        webbrowser.open(links[article_number - 1])
+        try:
+            article_number = int(input("Please select a number: "))
+            webbrowser.open(links[article_number - 1])
+        except IndexError as e:
+            print(f"Sorry, {e}")
+        except ValueError:
+            print("Must be an integer...")
     elif articles_finder == "n":
         return
     else:
         print("Sorry, please select [Y] or [N]...")
 
+
+def website_getter():
+    _instance = NewsHead()
+    website = input("Please select which website you'd like me to search through: ")
+    website = website.lower().strip()
+
+    if website == "n":
+        print(FETCHING)
+        headlines, links = _instance.get_nytimes_headlines()
+        return headlines, links
+    if website == "w":
+        print(FETCHING)
+        headlines, links = _instance.get_washpost_headlines()
+        return headlines, links
+    if website == "a":
+        print(FETCHING)
+        headlines, links = _instance.get_atlantic_headlines()
+        return headlines, links
+    if website == "p":
+        print(FETCHING)
+        headlines, links = _instance.get_politico_headlines()
+        return headlines, links
+    else:
+        print("Sorry, that's not a website I can search")
+
+
+def web_searcher(headline):
+    search_word = input("What key word would you like me to search for? ")
+    search_word = search_word.strip()
+    for word in headline:
+        if search_word in word:
+            print(f'\nHere is what I found containing ({search_word})', word)
+        else:
+            print("Sorry, I couldn't find that phrase in any headlines...")
 
 
 def main():
@@ -68,4 +120,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
