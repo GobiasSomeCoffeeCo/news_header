@@ -4,7 +4,7 @@ from re import search
 
 from requester import NewsHead
 
-FETCHING = "Fetching HEADlines, please be patient..."
+FETCHING = "Fetching Headlines, please be patient..."
 
 
 def event_loop():
@@ -32,26 +32,26 @@ def event_loop():
             headlines, links = news_head.get_nytimes_headlines()
             news_handler(headlines, links)
 
-        if cmd == "w":
+        elif cmd == "w":
             print(FETCHING)
             headlines, links = news_head.get_washpost_headlines()
             news_handler(headlines, links)
 
-        if cmd == "a":
+        elif cmd == "a":
             print(FETCHING)
             headlines, links = news_head.get_atlantic_headlines()
             news_handler(headlines, links)
 
-        if cmd == "p":
+        elif cmd == "p":
             print(FETCHING)
             headlines, links = news_head.get_politico_headlines()
             news_handler(headlines, links)
 
-        if cmd == "s":
+        elif cmd == "s":
             headlines, links = website_getter()
             web_searcher(headlines)
 
-        if cmd != "x" and cmd:
+        elif cmd != "x" and cmd:
             print(f"\nSorry, I do not understand {cmd} command...")
 
     print("\n===========================================")
@@ -107,11 +107,20 @@ def website_getter():
 def web_searcher(headline):
     search_word = input("What key word would you like me to search for? ")
     search_word = search_word.strip()
+    articles = []
     for word in headline:
         if search_word in word:
-            print(f'\nHere is what I found containing ({search_word})', word)
-        else:
-            print("Sorry, I couldn't find that phrase in any headlines...")
+            articles.append(word)
+    if articles:
+        print('==================================================')
+        print(f'\nHere is what I found containing "{search_word}": \n')
+        for i, article in enumerate(articles, 1):
+            print(f'{i}: {article}')
+    else:
+        print('\nSorry, I could not find any articles related to your search. Please remember they are case sensitive')
+
+
+
 
 
 def main():

@@ -13,7 +13,8 @@ class NewsHead:
         # self.headlines = []
 
     # TODO: A lot of DRY code. See about making it one function and passing in a dict or JSON?
-
+    # TODO: NYTimes headline feature broken
+    
     def get_nytimes_headlines(self):
         resp = requests.get("https://www.nytimes.com/")
         soup = bs4.BeautifulSoup(resp.text, "lxml")
