@@ -88,15 +88,15 @@ def website_getter():
         print(FETCHING)
         headlines, links = _instance.get_nytimes_headlines()
         return headlines, links
-    if website == "w":
+    elif website == "w":
         print(FETCHING)
         headlines, links = _instance.get_washpost_headlines()
         return headlines, links
-    if website == "a":
+    elif website == "a":
         print(FETCHING)
         headlines, links = _instance.get_atlantic_headlines()
         return headlines, links
-    if website == "p":
+    elif website == "p":
         print(FETCHING)
         headlines, links = _instance.get_politico_headlines()
         return headlines, links
