@@ -28,41 +28,46 @@ def event_loop():
         )
         cmd = cmd.lower().strip()
 
-        if cmd == "n" or "nytimes":
+        if cmd == "n":
             print(FETCHING)
-            headlines, links = news_head.get_nytimes_headlines()
-            news_handler(headlines, links)
+            # headlines, links = news_head.get_nytimes_headlines()
+            # news_handler(headlines, links)
 
-        elif cmd == "w" or "washingtonpost":
+        elif cmd == "w":
             print(FETCHING)
             headlines, links = news_head.get_washpost_headlines()
             news_handler(headlines, links)
 
-        elif cmd == "a" or "the atlantic":
+        elif cmd == "a":
             print(FETCHING)
             headlines, links = news_head.get_atlantic_headlines()
             news_handler(headlines, links)
 
-        elif cmd == "p" or "politico":
+        elif cmd == "p":
             print(FETCHING)
             headlines, links = news_head.get_politico_headlines()
             news_handler(headlines, links)
 
-        elif cmd == "s" or "search":
+        elif cmd == "s":
             headlines, links = website_getter()
             web_searcher(headlines)
 
-        elif cmd == "t" or "top headlines":
+        elif cmd == "t":
             print(FETCHING)
-            pol_headlines, _pol_links = news_head.get_politico_headlines()
-            atl_headlines, _atl_links = news_head.get_atlantic_headlines()
-            wash_headlines, _wash_links = news_head.get_washpost_headlines()
+            pol_headlines, pol_links = news_head.get_politico_headlines()
+            atl_headlines, atl_links = news_head.get_atlantic_headlines()
+            wash_headlines, wash_links = news_head.get_washpost_headlines()
+            pol_links = pol_links[:3]
+            atl_links = atl_links[:3]
+            wash_links = wash_links[:3]
             pol_headlines = pol_headlines[:3]
             atl_headlines = atl_headlines[:3]
             wash_headlines = wash_headlines[:3]
             top_list = list(chain(pol_headlines, atl_headlines, wash_headlines))
+            top_websites = list(chain(pol_links, atl_links, wash_links))
 
             top_headlines(top_list)
+            top_links(top_websites)
 
         elif cmd != "x" and cmd:
             print(f"\nSorry, I do not understand {cmd} command...")
@@ -121,11 +126,28 @@ def top_headlines(top_list):
     for i, headlines in enumerate(top_list, 1):
         if i == 1:
             print("\nHere are the top 3 Politico headlines: ")
-        if i % 4 == 0 and i <= 4:
+        elif i == 4:
             print("Here are the top 3 Atlantic headlines: ")
-        if i % 7 == 0 and i <= 7:
+        elif i == 7:
             print("Here are the top 3 Washington Post headlines: ")
         print(f"{i}: {headlines}")
+
+def top_links(links):
+    cmd = input('Do one of these articles interest you [Y]/[N]?  ')
+    cmd = cmd.lower().strip()
+    if cmd == 'y':
+        try:
+            article = int(input("Please select which article you'd like to visit: "))
+            webbrowser.open(links[article - 1])
+        except IndexError as e:
+            print(f'Error {e}')
+        except ValueError:
+            print('Must be an integer...')
+    elif cmd =='n':
+        return
+    else:
+        print('Please select [Y] or [N]')
+
 
 
 def web_searcher(headline):

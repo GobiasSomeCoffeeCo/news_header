@@ -30,7 +30,7 @@ class NewsHead:
         for tag in a_tags:
             tag = tag.a.get('href')
             links.append(tag)
-        print(headlines, links)
+        return headlines, links
 
     def get_washpost_headlines(self):
         resp = requests.get("https://www.washingtonpost.com/")
