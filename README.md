@@ -1,4 +1,16 @@
-# news_header
-Just messing around. A poor man's version of programming.
+# NewsHeader
 
-It is a simple program to quickly search news headlines and open stories that interest you in your browser.
+(Work in Progress)
+A simple program to quickly search news headlines from the comfort of your CLI
+
+If a headline interests you, you can select it and it will open in your browser for further consumption
+
+# Why?
+
+Just because
+
+# Install
+
+> Download Python 3.7 >=
+> git clone https://github.com/GobiasSomeCoffeeCo/news_header.git
+> pip3 install -r requirements.txt

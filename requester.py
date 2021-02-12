@@ -1,7 +1,10 @@
 import bs4
 import requests
 import re
-import tqdm
+
+from rich import print
+from rich.progress import track
+# import tqdm
 
 
 

@@ -1,8 +1,23 @@
 import webbrowser
 from re import search
 from itertools import chain
+from rich import print
+
+from rich.console import Console
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    TextColumn,
+    track,
+    TransferSpeedColumn,
+    TimeRemainingColumn,
+    Progress,
+    TaskID,
+)
 
 from requester import NewsHead
+
+console = Console()
 
 FETCHING = "Fetching Headlines, please be patient..."
 
@@ -10,9 +25,9 @@ FETCHING = "Fetching Headlines, please be patient..."
 def event_loop():
     news_head = NewsHead()
 
-    print("\n=============================================")
-    print("What headlines would you like me to fetch???")
-    print("=============================================")
+    console.print("\n[bold cyan]=============================================[/bold cyan]")
+    console.print("[bold dark_orange3]What headlines would you like me to fetch???[/bold dark_orange3]")
+    console.print("[bold cyan]=============================================[/bold cyan]")
 
     cmd = "EMPTY"
     while cmd != "x" and cmd:
@@ -72,9 +87,9 @@ def event_loop():
         elif cmd != "x" and cmd:
             print(f"\nSorry, I do not understand {cmd} command...")
 
-    print("\n===========================================")
-    print("All done, thanks for using News Header!!!!!!")
-    print("===========================================\n")
+    print("\n[bold cyan]===========================================[/bold cyan]")
+    print("[bold dark_orange3]All done, thanks for using News Header!!!!!![/bold dark_orange3]")
+    print("[bold cyan]===========================================[/bold cyan]\n")
 
 
 def news_handler(headlines, links):
@@ -125,29 +140,29 @@ def website_getter():
 def top_headlines(top_list):
     for i, headlines in enumerate(top_list, 1):
         if i == 1:
-            print("\nHere are the top 3 Politico headlines: ")
+            print("\n[Here are the top 3 Politico headlines: ")
         elif i == 4:
             print("Here are the top 3 Atlantic headlines: ")
         elif i == 7:
             print("Here are the top 3 Washington Post headlines: ")
         print(f"{i}: {headlines}")
 
+
 def top_links(links):
-    cmd = input('Do one of these articles interest you [Y]/[N]?  ')
+    cmd = input("Do one of these articles interest you [Y]/[N]?  ")
     cmd = cmd.lower().strip()
-    if cmd == 'y':
+    if cmd == "y":
         try:
             article = int(input("Please select which article you'd like to visit: "))
             webbrowser.open(links[article - 1])
         except IndexError as e:
-            print(f'Error {e}')
+            print(f"Error {e}")
         except ValueError:
-            print('Must be an integer...')
-    elif cmd =='n':
+            print("Must be an integer...")
+    elif cmd == "n":
         return
     else:
-        print('Please select [Y] or [N]')
-
+        print("Please select [Y] or [N]")
 
 
 def web_searcher(headline):
@@ -155,7 +170,7 @@ def web_searcher(headline):
     search_word = search_word.strip()
     articles = []
     for word in headline:
-        if search_word in word:
+        if search_word.upper() in word.upper():
             articles.append(word)
     if articles:
         print("==================================================")
@@ -163,9 +178,7 @@ def web_searcher(headline):
         for i, article in enumerate(articles, 1):
             print(f"{i}: {article}")
     else:
-        print(
-            "\nSorry, I could not find any articles related to your search. Please remember they are case sensitive"
-        )
+        print("\nSorry, I could not find any articles related to your search.")
 
 
 def main():
