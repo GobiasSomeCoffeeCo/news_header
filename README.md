@@ -11,6 +11,10 @@ Just because
 
 # Install
 
-> Download Python 3.7 >=
-> git clone https://github.com/GobiasSomeCoffeeCo/news_header.git
-> pip3 install -r requirements.txt
+```bash
+# Download Python 3.7 >=
+git clone https://github.com/GobiasSomeCoffeeCo/news_header.git
+```
+```bash
+pip3 install -r requirements.txt
+```
