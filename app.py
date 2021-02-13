@@ -1,3 +1,4 @@
+from typing import Type
 import webbrowser
 from re import search
 from itertools import chain
@@ -19,7 +20,7 @@ from requester import NewsHead
 
 console = Console()
 
-FETCHING = "Fetching Headlines, please be patient..."
+FETCHING = "[bold cyan]Fetching Headlines, please be patient...[/bold cyan]"
 
 
 def event_loop():
@@ -36,6 +37,7 @@ def event_loop():
                      \r[W]ashington Post headlines?\n\
                      \rThe [A]tlantic headlines?\n\
                      \r[P]olitico headlines?\n\
+                     \r[WSJ]ournal headlines?\n\
                      \r[T]op Headlines\n\
                      \r[S]earch for phrase\n\
                      \rE[x]it\n\
@@ -49,7 +51,7 @@ def event_loop():
             # news_handler(headlines, links)
 
         elif cmd == "w":
-            print(FETCHING)
+            console.print(FETCHING)
             headlines, links = news_head.get_washpost_headlines()
             news_handler(headlines, links)
 
@@ -58,34 +60,45 @@ def event_loop():
             headlines, links = news_head.get_atlantic_headlines()
             news_handler(headlines, links)
 
+        elif cmd == "wsj":
+            print(FETCHING)
+            headlines, links = news_head.get_wsj_headlines()
+            news_handler(headlines, links)
+
         elif cmd == "p":
             print(FETCHING)
             headlines, links = news_head.get_politico_headlines()
             news_handler(headlines, links)
 
         elif cmd == "s":
-            headlines, links = website_getter()
-            web_searcher(headlines)
+            try:
+                headlines, links = website_getter()
+                web_searcher(headlines)
+            except TypeError:
+                pass
 
         elif cmd == "t":
             print(FETCHING)
             pol_headlines, pol_links = news_head.get_politico_headlines()
             atl_headlines, atl_links = news_head.get_atlantic_headlines()
             wash_headlines, wash_links = news_head.get_washpost_headlines()
+            wsj_headlines, wsj_links = news_head.get_wsj_headlines()
             pol_links = pol_links[:3]
             atl_links = atl_links[:3]
             wash_links = wash_links[:3]
+            wsj_links = wsj_links[:3]
             pol_headlines = pol_headlines[:3]
             atl_headlines = atl_headlines[:3]
             wash_headlines = wash_headlines[:3]
-            top_list = list(chain(pol_headlines, atl_headlines, wash_headlines))
-            top_websites = list(chain(pol_links, atl_links, wash_links))
+            wsj_headlines = wsj_headlines[:3]
+            top_list = list(chain(pol_headlines, atl_headlines, wash_headlines, wsj_headlines))
+            top_websites = list(chain(pol_links, atl_links, wash_links, wsj_links))
 
             top_headlines(top_list)
             top_links(top_websites)
 
         elif cmd != "x" and cmd:
-            print(f"\nSorry, I do not understand {cmd} command...")
+            print(f"\n[bold dark_orange3]Sorry, I do not understand '{cmd}' command...[/bold dark_orange3]")
 
     print("\n[bold cyan]===========================================[/bold cyan]")
     print("[bold dark_orange3]All done, thanks for using News Header!!!!!![/bold dark_orange3]")
@@ -116,7 +129,7 @@ def website_getter():
     _instance = NewsHead()
     website = input("Please select which website you'd like me to search through: ")
     website = website.lower().strip()
-
+    
     if website == "n":
         print(FETCHING)
         headlines, links = _instance.get_nytimes_headlines()
@@ -133,18 +146,25 @@ def website_getter():
         print(FETCHING)
         headlines, links = _instance.get_politico_headlines()
         return headlines, links
+    elif website == "wsj":
+        print(FETCHING)
+        headlines, links = _instance.get_wsj_headlines()
+        return headlines, links
     else:
-        print("Sorry, that's not a website I can search")
+        print("\n[bold dark_orange3]Sorry, that's not a website I can search. Please select a searchable website...[/bold dark_orange3]\n\r")
+    
 
 
 def top_headlines(top_list):
     for i, headlines in enumerate(top_list, 1):
         if i == 1:
-            print("\n[Here are the top 3 Politico headlines: ")
+            print("\n[bold cyan]Here are the top 3 Politico headlines: [/bold cyan]")
         elif i == 4:
-            print("Here are the top 3 Atlantic headlines: ")
+            print("[bold cyan]Here are the top 3 Atlantic headlines: [/bold cyan]")
         elif i == 7:
-            print("Here are the top 3 Washington Post headlines: ")
+            print("[bold cyan]Here are the top 3 Washington Post headlines: [/bold cyan]")
+        elif i == 10:
+            print("[bold cyan]Here are the top 3 WSJ headlines: [/bold cyan]")
         print(f"{i}: {headlines}")
 
 
@@ -162,7 +182,7 @@ def top_links(links):
     elif cmd == "n":
         return
     else:
-        print("Please select [Y] or [N]")
+        print("[/bold cyan]Please select [Y] or [N][/bold cyan]")
 
 
 def web_searcher(headline):
@@ -173,7 +193,7 @@ def web_searcher(headline):
         if search_word.upper() in word.upper():
             articles.append(word)
     if articles:
-        print("==================================================")
+        print("[bold cyan]==================================================[/bold cyan]")
         print(f'\nHere is what I found containing "{search_word}": \n')
         for i, article in enumerate(articles, 1):
             print(f"{i}: {article}")

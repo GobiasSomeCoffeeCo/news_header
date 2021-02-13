@@ -1,7 +1,8 @@
-import bs4
-import requests
 import re
 
+import bs4
+from bs4.element import AttributeValueWithCharsetSubstitution
+import requests
 from rich import print
 from rich.progress import track
 # import tqdm
@@ -85,5 +86,23 @@ class NewsHead:
 
         return headlines, links
 
-news_head = NewsHead()
-news_head.get_nytimes_headlines()
+    def get_wsj_headlines(self):
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        resp = requests.get("https://www.wsj.com/", headers=headers)
+        soup = bs4.BeautifulSoup(resp.text, "lxml")
+        headline = soup.find_all("h3", class_=(re.compile("WSJTheme--headline")), limit=20)
+        links = []
+        headlines = []
+        try:
+            for article in headline:
+                link = article.a.get("href")
+                article = article.text
+                links.append(link)
+                headlines.append(article)
+        except AttributeError:
+            pass
+        return headlines, links
+
+# news_head = NewsHead()
+# x = news_head.get_wsj_headlines()
+# print(x)
