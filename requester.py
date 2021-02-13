@@ -36,7 +36,7 @@ class NewsHead:
             links.append(tag)
         return headlines, links
 
-    def get_washpost_headlines(self):
+    async def get_washpost_headlines(self):
         resp = requests.get("https://www.washingtonpost.com/")
         soup = bs4.BeautifulSoup(resp.text, "lxml")
         headline = soup.find_all("h2", class_=(re.compile("headline")), limit=12)

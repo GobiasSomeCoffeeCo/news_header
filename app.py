@@ -2,19 +2,9 @@ from typing import Type
 import webbrowser
 from re import search
 from itertools import chain
-from rich import print
 
+from rich import print
 from rich.console import Console
-from rich.progress import (
-    BarColumn,
-    DownloadColumn,
-    TextColumn,
-    track,
-    TransferSpeedColumn,
-    TimeRemainingColumn,
-    Progress,
-    TaskID,
-)
 
 from requester import NewsHead
 

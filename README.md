@@ -6,6 +6,8 @@ A simple program to quickly search news headlines from the comfort of your termi
 
 If a headline interests you, you can select it and it will open in your browser for further consumption
 
+<img src="images/Screenshot1.png">
+
 # Why?
 
 Just because
