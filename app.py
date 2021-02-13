@@ -1,7 +1,8 @@
 from typing import Type
 import webbrowser
-from re import search
+# from re import search
 from itertools import chain
+# from threading import Thread
 
 from rich import print
 from rich.console import Console
@@ -16,9 +17,15 @@ FETCHING = "[bold cyan]Fetching Headlines, please be patient...[/bold cyan]"
 def event_loop():
     news_head = NewsHead()
 
-    console.print("\n[bold cyan]=============================================[/bold cyan]")
-    console.print("[bold dark_orange3]What headlines would you like me to fetch???[/bold dark_orange3]")
-    console.print("[bold cyan]=============================================[/bold cyan]")
+    console.print(
+        "\n[bold cyan]=============================================[/bold cyan]"
+    )
+    console.print(
+        "[bold dark_orange3]What headlines would you like me to fetch???[/bold dark_orange3]"
+    )
+    console.print(
+        "[bold cyan]=============================================[/bold cyan]"
+    )
 
     cmd = "EMPTY"
     while cmd != "x" and cmd:
@@ -81,17 +88,27 @@ def event_loop():
             atl_headlines = atl_headlines[:3]
             wash_headlines = wash_headlines[:3]
             wsj_headlines = wsj_headlines[:3]
-            top_list = list(chain(pol_headlines, atl_headlines, wash_headlines, wsj_headlines))
+            top_list = list(
+                chain(pol_headlines, atl_headlines, wash_headlines, wsj_headlines)
+            )
             top_websites = list(chain(pol_links, atl_links, wash_links, wsj_links))
 
             top_headlines(top_list)
             top_links(top_websites)
+        
+        elif not cmd:
+            cmd = " "
+            print("\n[bold dark_orange3]No command given! Please select from the available list... [/bold dark_orange3]")
 
         elif cmd != "x" and cmd:
-            print(f"\n[bold dark_orange3]Sorry, I do not understand '{cmd}' command...[/bold dark_orange3]")
+            print(
+                f"\n[bold dark_orange3]Sorry, I do not understand '{cmd}' command...[/bold dark_orange3]"
+            )
 
     print("\n[bold cyan]===========================================[/bold cyan]")
-    print("[bold dark_orange3]All done, thanks for using News Header!!!!!![/bold dark_orange3]")
+    print(
+        "[bold dark_orange3]All done, thanks for using News Header!!!!!![/bold dark_orange3]"
+    )
     print("[bold cyan]===========================================[/bold cyan]\n")
 
 
@@ -119,7 +136,7 @@ def website_getter():
     _instance = NewsHead()
     website = input("Please select which website you'd like me to search through: ")
     website = website.lower().strip()
-    
+
     if website == "n":
         print(FETCHING)
         headlines, links = _instance.get_nytimes_headlines()
@@ -141,8 +158,9 @@ def website_getter():
         headlines, links = _instance.get_wsj_headlines()
         return headlines, links
     else:
-        print("\n[bold dark_orange3]Sorry, that's not a website I can search. Please select a searchable website...[/bold dark_orange3]\n\r")
-    
+        print(
+            "\n[bold dark_orange3]Sorry, that's not a website I can search. Please select a searchable website...[/bold dark_orange3]\n\r"
+        )
 
 
 def top_headlines(top_list):
@@ -152,7 +170,9 @@ def top_headlines(top_list):
         elif i == 4:
             print("[bold cyan]Here are the top 3 Atlantic headlines: [/bold cyan]")
         elif i == 7:
-            print("[bold cyan]Here are the top 3 Washington Post headlines: [/bold cyan]")
+            print(
+                "[bold cyan]Here are the top 3 Washington Post headlines: [/bold cyan]"
+            )
         elif i == 10:
             print("[bold cyan]Here are the top 3 WSJ headlines: [/bold cyan]")
         print(f"{i}: {headlines}")
@@ -183,7 +203,9 @@ def web_searcher(headline):
         if search_word.upper() in word.upper():
             articles.append(word)
     if articles:
-        print("[bold cyan]==================================================[/bold cyan]")
+        print(
+            "[bold cyan]==================================================[/bold cyan]"
+        )
         print(f'\nHere is what I found containing "{search_word}": \n')
         for i, article in enumerate(articles, 1):
             print(f"{i}: {article}")

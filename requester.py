@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 import bs4
 from bs4.element import AttributeValueWithCharsetSubstitution
@@ -36,7 +37,7 @@ class NewsHead:
             links.append(tag)
         return headlines, links
 
-    async def get_washpost_headlines(self):
+    def get_washpost_headlines(self) -> List:
         resp = requests.get("https://www.washingtonpost.com/")
         soup = bs4.BeautifulSoup(resp.text, "lxml")
         headline = soup.find_all("h2", class_=(re.compile("headline")), limit=12)
@@ -52,7 +53,7 @@ class NewsHead:
             pass
         return headlines, links
 
-    def get_atlantic_headlines(self):
+    def get_atlantic_headlines(self) -> List:
         resp = requests.get("https://www.theatlantic.com/")
         soup = bs4.BeautifulSoup(resp.text, "lxml")
         headline = soup.find_all("a", class_=(re.compile("hed-link")))
@@ -68,7 +69,7 @@ class NewsHead:
             pass
         return headlines, links
 
-    def get_politico_headlines(self):
+    def get_politico_headlines(self) -> List:
         resp = requests.get("https://www.politico.com/")
         soup = bs4.BeautifulSoup(resp.text, "lxml")
         headline = soup.find_all("h3", class_="headline")
@@ -86,7 +87,7 @@ class NewsHead:
 
         return headlines, links
 
-    def get_wsj_headlines(self):
+    def get_wsj_headlines(self) -> List:
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         resp = requests.get("https://www.wsj.com/", headers=headers)
         soup = bs4.BeautifulSoup(resp.text, "lxml")
@@ -104,5 +105,5 @@ class NewsHead:
         return headlines, links
 
 # news_head = NewsHead()
-# x = news_head.get_wsj_headlines()
-# print(x)
+# x, y = news_head.get_washpost_headlines()
+# print(x, y)
