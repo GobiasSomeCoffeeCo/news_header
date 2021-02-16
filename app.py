@@ -8,7 +8,7 @@ import concurrent.futures
 from colorama import init, Fore
 from rich.progress import Progress
 
-from helper.Requester import NewsHead
+# from helper.Requester import NewsHead
 from helper.AsyncRequester import NewsHead
 
 
