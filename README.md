@@ -16,7 +16,7 @@ Just because
 
 ```bash
 # Download Python >= 3.7
-git clone https://github.com/GobiasSomeCoffeeCo/newser.git
+git clone https://github.com/GobiasSomeCoffeeCo/news_header.git
 ```
 ```bash
 pip install -r requirements.txt
