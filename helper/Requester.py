@@ -84,7 +84,6 @@ class NewsHead:
                 links.append(link)
         except AttributeError:
             pass
-
         return headlines, links
 
     def get_wsj_headlines(self) -> List:
@@ -104,6 +103,6 @@ class NewsHead:
             pass
         return headlines, links
 
-# news_head = NewsHead()
-# x, y = news_head.get_washpost_headlines()
+# news = NewsHead()
+# x, y = news.get_nytimes_headlines()
 # print(x, y)
