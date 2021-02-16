@@ -6,29 +6,23 @@ import time
 import concurrent.futures
 
 from colorama import init, Fore
+from rich.progress import Progress
 
 from helper.Requester import NewsHead
 from helper.AsyncRequester import NewsHead
 
-init()
 
-FETCHING = ("\nFetching Headlines, please be patient...\n")
+FETCHING = "\nFetching Headlines, please be patient...\n"
 
 news = NewsHead()
+loop = asyncio.get_event_loop()
+
 
 def event_loop():
-    news = NewsHead()
-    loop = asyncio.get_event_loop()
 
-    print(
-        "\n============================================="
-    )
-    print(
-        "What headlines would you like me to fetch???"
-    )
-    print(
-        "============================================="
-    )
+    print("\n=============================================")
+    print("What headlines would you like me to fetch???")
+    print("=============================================")
 
     cmd = "EMPTY"
     while cmd != "x" and cmd:
@@ -85,18 +79,22 @@ def event_loop():
                 pass
             finally:
                 loop.close()
-           
+
             pol_headlines, pol_links = slicer(pol)
             atl_headlines, atl_links = slicer(atl)
             wsj_headlines, wsj_links = slicer(wsj)
             wash_headlines, wash_links = slicer(wash)
 
-            top_list = list(chain(pol_headlines, atl_headlines, wash_headlines, wsj_headlines))
-            top_websites = list(chain(pol_links, atl_links, wash_links, wsj_links))
+            top_list = list(
+                chain(pol_headlines, atl_headlines, wash_headlines, wsj_headlines)
+            )
+            top_websites = list(
+                chain(pol_links, atl_links, wash_links, wsj_links)
+            )
 
             top_headlines(top_list)
             top_links(top_websites)
-        
+
         elif not cmd:
             cmd = " "
             print("\nNo command given! Please select from the available list...")
@@ -107,9 +105,7 @@ def event_loop():
             )
 
     print("\n===========================================")
-    print(
-        "All done, thanks for using News Header!!!!!!"
-    )
+    print("All done, thanks for using News Header!!!!!!")
     print("===========================================\n")
 
 
@@ -134,29 +130,28 @@ def news_handler(headlines, links):
 
 
 def website_getter():
-    _instance = NewsHead()
     website = input("Please select which website you'd like me to search through: ")
     website = website.lower().strip()
 
     if website == "n":
         print(FETCHING)
-        headlines, links = _instance.get_nytimes_headlines()
+        headlines, links = loop.run_until_complete(news.get_nytimes_headlines())
         return headlines, links
     elif website == "w":
         print(FETCHING)
-        headlines, links = _instance.get_washpost_headlines()
+        headlines, links = loop.run_until_complete(news.get_washpost_headlines())
         return headlines, links
     elif website == "a":
         print(FETCHING)
-        headlines, links = _instance.get_atlantic_headlines()
+        headlines, links = loop.run_until_complete(news.get_atlantic_headlines())
         return headlines, links
     elif website == "p":
         print(FETCHING)
-        headlines, links = _instance.get_politico_headlines()
+        headlines, links = loop.run_until_complete(news.get_politico_headlines())
         return headlines, links
     elif website == "wsj":
         print(FETCHING)
-        headlines, links = _instance.get_wsj_headlines()
+        headlines, links = loop.run_until_complete(news.get_wsj_headlines())
         return headlines, links
     else:
         print(
@@ -171,9 +166,7 @@ def top_headlines(top_list):
         elif i == 4:
             print("Here are the top 3 Atlantic headlines: ")
         elif i == 7:
-            print(
-                "Here are the top 3 Washington Post headlines: "
-            )
+            print("Here are the top 3 Washington Post headlines: ")
         elif i == 10:
             print("Here are the top 3 WSJ headlines:")
         print(Fore.CYAN + f"{i}: {headlines}")
@@ -204,14 +197,13 @@ def web_searcher(headline):
         if search_word.upper() in word.upper():
             articles.append(word)
     if articles:
-        print(
-            "=================================================="
-        )
+        print("==================================================")
         print(f'\nHere is what I found containing "{search_word}": \n')
         for i, article in enumerate(articles, 1):
             print(f"{i}: {article}")
     else:
         print("\nSorry, I could not find any articles related to your search.")
+
 
 async def async_web_getter():
     input_coroutines = [
@@ -225,6 +217,7 @@ async def async_web_getter():
     )
     return pol, atl, wsj, wash
 
+
 def slicer(results):
     headlines, lists = results[0], results[1]
     headlines, lists = headlines[:3], lists[:3]
@@ -237,4 +230,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

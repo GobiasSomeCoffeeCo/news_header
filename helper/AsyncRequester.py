@@ -6,12 +6,8 @@ import time
 import httpx
 from httpx import Response
 import bs4
-from bs4.element import AttributeValueWithCharsetSubstitution
 import requests
-from rich import print
-from rich.progress import track
 import asyncio
-# import tqdm
 
 
 
