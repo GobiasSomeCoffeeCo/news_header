@@ -12,6 +12,7 @@ from lib.helpers import (
     web_searcher,
     async_web_getter,
     slicer,
+    loop
 )
 
 init()
@@ -19,8 +20,6 @@ init()
 FETCHING = "\nFetching Headlines, please be patient...\n"
 
 news = NewsHead()
-loop = asyncio.get_event_loop()
-
 
 def event_loop():
 
@@ -79,12 +78,8 @@ def event_loop():
 
         elif cmd == "t":
             print(FETCHING)
-            try:
-                pol, atl, wsj, wash = loop.run_until_complete(async_web_getter())
-            except Exception as e:
-                pass
-            finally:
-                loop.close()
+            
+            pol, atl, wsj, wash = loop.run_until_complete(async_web_getter())
 
             pol_headlines, pol_links = slicer(pol)
             atl_headlines, atl_links = slicer(atl)
