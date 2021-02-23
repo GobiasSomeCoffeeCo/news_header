@@ -1,13 +1,10 @@
 from logging import error
 import re
 from typing import List
-import time
 
 import httpx
 from httpx import Response
 import bs4
-import requests
-import asyncio
 
 
 
@@ -21,7 +18,7 @@ class NewsHead:
     # TODO: A lot of DRY code. See about making it one function and passing in a dict or JSON?
     # TODO: NYTimes headline feature broken
     
-    async def get_nytimes_headlines(self):
+    async def get_nytimes_headlines(self) -> List:
         async with httpx.AsyncClient(timeout=None) as client:
             resp: Response = await client.get("https://www.nytimes.com/")
             if resp.status_code != 200:
@@ -39,6 +36,7 @@ class NewsHead:
             for tag in a_tags:
                 tag = tag.a.get('href')
                 links.append(tag)
+            print("Collected data for NYTimes...", flush=True)
             return headlines, links
 
     async def get_washpost_headlines(self) -> List:
@@ -58,7 +56,7 @@ class NewsHead:
                     links.append(link)
             except AttributeError:
                 pass
-            print("wash", flush=True)
+            print("Collected data for Washington Post...", flush=True)
             return headlines, links
 
     async def get_atlantic_headlines(self) -> List:
@@ -78,7 +76,7 @@ class NewsHead:
                     links.append(link)
             except AttributeError:
                 pass
-            print("atlantic", flush=True)
+            print("Collected data for The Atlantic...", flush=True)
             return headlines, links
 
     async def get_politico_headlines(self) -> List:
@@ -99,7 +97,7 @@ class NewsHead:
                     links.append(link)
             except AttributeError:
                 pass
-            print("politico", flush=True)
+            print("Collected data for Politico...", flush=True)
             return headlines, links
 
     async def get_wsj_headlines(self) -> List:
@@ -120,7 +118,7 @@ class NewsHead:
                     headlines.append(article)
             except AttributeError:
                 pass
-            print("wsj", flush=True)
+            print("Collected data for WSJ...", flush=True)
             return headlines, links
 
     
