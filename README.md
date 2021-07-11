@@ -2,15 +2,15 @@
 
 (Work in Progress)
 
-* A simple program to quickly search news headlines from the comfort of your terminal
+* A poorly written program to learn async in python and quickly search news headlines from the comfort of your terminal 
 
-* If a headline interests you, you can select it and it will open in your browser for further consumption
+* If a headline interests you, you can select it and it will open in your browser for further consumption :beer:
 
 <img src="images/Screenshot1.png">
 
 # Why?
 
-Just because
+Just because :shrug:
 
 # Install
 
